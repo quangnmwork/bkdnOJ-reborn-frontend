@@ -4,7 +4,6 @@ import {
   CLEAR_CONTEST_PARAMS,
   CLEAR_PUBLIC_PARAMS,
   CLEAR_ALL_PARAMS,
-  NO_CONTEST_KEY,
 } from "./types";
 
 const INITIAL_STATE = {};

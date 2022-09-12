@@ -23,9 +23,6 @@ class Content extends React.Component {
   }
 
   render() {
-    const props = this.props;
-    const {num} = this.state;
-
     return (
       <div className="content-div shadow rounded">
         {/* <div className="row d-block">

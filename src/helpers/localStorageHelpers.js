@@ -33,7 +33,7 @@ export function __ls_remove_credentials() {
 
 export function __ls_get_code_editor() {
     const val = localStorage.getItem(LS_CODE_EDITOR)
-    if (!!val) return JSON.parse(val);
+    if (val) return JSON.parse(val);
     return "";
 }
 export function __ls_set_code_editor(code) {

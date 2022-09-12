@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
-import { modesByName } from 'ace-builds/src-noconflict/ext-modelist';
-import 'helpers/importAllAceMode';
+import {modesByName} from "ace-builds/src-noconflict/ext-modelist";
+import "helpers/importAllAceMode";
 
-import { DEFAULT_ACE_MODE, FALLBACK_ACE_MODE } from 'constants/aceEditorMode';
+import {FALLBACK_ACE_MODE} from "constants/aceEditorMode";
 
 export default class CodeEditor extends React.Component {
   constructor(props) {
@@ -15,10 +15,7 @@ export default class CodeEditor extends React.Component {
   }
 
   getAceMode() {
-    return (
-      !!modesByName[this.props.ace]
-      ? this.props.ace
-      : FALLBACK_ACE_MODE)
+    return modesByName[this.props.ace] ? this.props.ace : FALLBACK_ACE_MODE;
   }
 
   render() {
@@ -26,14 +23,14 @@ export default class CodeEditor extends React.Component {
       <AceEditor
         mode={this.getAceMode()}
         theme="github"
-        onChange={(val) => this.props.onCodeChange(val)}
+        onChange={val => this.props.onCodeChange(val)}
         value={this.props.code}
         name="sub-source-code-editor"
-        editorProps={{ $blockScrolling: true }}
+        editorProps={{$blockScrolling: true}}
         style={styles.ace}
         readOnly={!!this.props.readOnly}
       />
-    )
+    );
   }
 }
 
@@ -48,5 +45,5 @@ const styles = {
     width: "100%",
     // maxHeight: "300px",
     overflow: "auto",
-  }
-}
+  },
+};

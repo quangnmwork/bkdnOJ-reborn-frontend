@@ -166,7 +166,7 @@ class SubmitForm extends React.Component {
       </Form>
     )
   }
-};
+}
 
 let wrapped = SubmitForm;
 const mapDispatchToProps = dispatch => {

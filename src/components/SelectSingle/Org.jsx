@@ -1,32 +1,42 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import AsyncSelect from 'react-select/async';
+import React from "react";
 
-import orgAPI from 'api/organization';
+import AsyncSelect from "react-select/async";
 
-const OrgSelectLabel = (props) => {
-  const {slug, short_name, name, logo_url, is_unlisted} = props;
+import orgAPI from "api/organization";
 
-  let boundColor = 'bg-dark', boundText = 'org';
+const OrgSelectLabel = props => {
+  const {slug, short_name, is_unlisted} = props;
+
+  let boundColor = "bg-dark",
+    boundText = "org";
   if (is_unlisted) {
-    boundColor = 'bg-secondary'; boundText = ('private');
+    boundColor = "bg-secondary";
+    boundText = "private";
   }
 
   return (
-    <div className="org-choice text-left d-flex flex-column" style={{
-      fontSize: "14px",
-      focus: {
-        opacity: "50%",
-      }
-    }}>
+    <div
+      className="org-choice text-left d-flex flex-column"
+      style={{
+        fontSize: "14px",
+        focus: {
+          opacity: "50%",
+        },
+      }}
+    >
       <span>
-        <span className={`rounded text-light pl-1 pr-1 mr-1 ${boundColor}`}>{boundText}</span>
+        <span className={`rounded text-light pl-1 pr-1 mr-1 ${boundColor}`}>
+          {boundText}
+        </span>
         {slug}
       </span>
-      <span style={{fontSize: "10px"}} className="text-truncate">{`${short_name}`}</span>
+      <span
+        style={{fontSize: "10px"}}
+        className="text-truncate"
+      >{`${short_name}`}</span>
     </div>
   );
-}
+};
 
 export default class UserSingleSelect extends React.Component {
   constructor(props) {
@@ -34,44 +44,43 @@ export default class UserSingleSelect extends React.Component {
   }
 
   async loadOptions(val) {
-    return orgAPI.getOrgs({params: {search: val}})
-    .then((res) => {
-      let data = res.data.results.map((org) => ({
+    return orgAPI.getOrgs({params: {search: val}}).then(res => {
+      let data = res.data.results.map(org => ({
         value: org.slug,
-        label: <OrgSelectLabel {...org}/>,
+        label: <OrgSelectLabel {...org} />,
         data: org,
       }));
       return data;
-    })
+    });
   }
 
   render() {
     const org = this.props.value;
 
-    return(
+    return (
       <>
         <AsyncSelect
           cacheOptions
           // defaultOptions
           placeholder="Tìm slug/name/short_name..."
-          noOptionsMessage={()=>(
-            "Hệ thống chỉ trả về 20 Orgs khớp tìm kiếm nhất. "+
-            "Hãy thử đổi nội dung tìm nếu không tìm thấy Org mong muốn.")}
-
-          loadOptions={(val) => this.loadOptions(val)}
-          onChange={(sel) => this.props.onChange({...sel.data})}
-
-          value = {
-            org ? { value: org.slug, label: <OrgSelectLabel {...org}/>, data: org } : null
+          noOptionsMessage={() =>
+            "Hệ thống chỉ trả về 20 Orgs khớp tìm kiếm nhất. " +
+            "Hãy thử đổi nội dung tìm nếu không tìm thấy Org mong muốn."
           }
-
-          styles = {{
+          loadOptions={val => this.loadOptions(val)}
+          onChange={sel => this.props.onChange({...sel.data})}
+          value={
+            org
+              ? {value: org.slug, label: <OrgSelectLabel {...org} />, data: org}
+              : null
+          }
+          styles={{
             container: () => ({
               width: "100%",
-            })
+            }),
           }}
         />
       </>
-    )
+    );
   }
 }

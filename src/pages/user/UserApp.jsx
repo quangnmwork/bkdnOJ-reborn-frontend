@@ -1,10 +1,10 @@
-import React from 'react';
-import { Container } from 'react-bootstrap';
-import { Outlet } from 'react-router-dom';
-import { ScrollToTop } from 'helpers/react-router';
-import { Header, Navbar, SubHeader, Footer, ScrollToTopBtn } from 'components';
+import React from "react";
+import {Container} from "react-bootstrap";
+import {Outlet} from "react-router-dom";
 
-import './UserApp.scss';
+import {Header, Navbar, SubHeader, Footer, ScrollToTopBtn} from "components";
+
+import "./UserApp.scss";
 
 export default class UserApp extends React.Component {
   render() {
@@ -17,15 +17,15 @@ export default class UserApp extends React.Component {
         <div className="content-wrapper">
           {/* <ScrollToTop /> */}
           <Container className="content">
-            <Outlet/>
+            <Outlet />
           </Container>
         </div>
 
-        <div className='footer-wrapper'>
+        <div className="footer-wrapper">
           <Footer />
         </div>
         <ScrollToTopBtn />
       </>
-    )
+    );
   }
 }

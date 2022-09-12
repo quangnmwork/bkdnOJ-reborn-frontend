@@ -1,29 +1,27 @@
-import React from 'react';
-import { Navigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { connect } from 'react-redux';
+import React from "react";
+import {Navigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {connect} from "react-redux";
 
-import { updateUser, clearUser } from 'redux/User/actions';
-import { updateProfile } from 'redux/Profile/actions';
-import { updateMyOrg } from 'redux/MyOrg/actions';
+import {updateUser, clearUser} from "redux/User/actions";
+import {updateProfile} from "redux/Profile/actions";
+import {updateMyOrg} from "redux/MyOrg/actions";
 
-import { Row, Col, Tabs, Tab } from 'react-bootstrap';
+import {Row, Col, Tabs, Tab} from "react-bootstrap";
 
-import profileClient from 'api/profile';
+import profileClient from "api/profile";
 
 // Assets
-import { FaUniversity } from 'react-icons/fa';
 
 // Helpers
-import { log } from 'helpers/logger';
 
-import {SpinLoader} from 'components';
+import {SpinLoader} from "components";
 
-import './UserProfile.scss';
-import { __ls_set_auth_user, __ls_get_access_token } from 'helpers/localStorageHelpers';
-import { setTitle } from 'helpers/setTitle';
+import "./UserProfile.scss";
 
-import { AboutTab, SettingTab } from './_';
+import {setTitle} from "helpers/setTitle";
+
+import {AboutTab, SettingTab} from "./_";
 
 class UserProfile extends React.Component {
   constructor(props) {
@@ -31,31 +29,35 @@ class UserProfile extends React.Component {
     this.state = {
       profile: this.props.profile,
       loaded: false,
-    }
+    };
     this.user = this.props.user;
-    setTitle('Profile')
+    setTitle("Profile");
   }
 
   fetch() {
-    const profile = this.state.profile;
-    this.setState({ profile: null, loaded: false })
+    this.setState({profile: null, loaded: false});
 
-    setTimeout(() => profileClient.fetchProfile()
-      .then((res) => {
-        this.setState({
-          profile: res.data,
-          loaded: true,
-        })
-        this.props.updateUser({...res.data.user, avatar: res.data.avatar});
-        this.props.updateProfile({ ...res.data, });
-      }).catch((err) => {
-        this.setState({
-          loaded: true,
-          errors: {errors: err.response.data || ["Cannot authenticate."]},
-        })
-        console.log(err);
-      })
-    , 1000);
+    setTimeout(
+      () =>
+        profileClient
+          .fetchProfile()
+          .then(res => {
+            this.setState({
+              profile: res.data,
+              loaded: true,
+            });
+            this.props.updateUser({...res.data.user, avatar: res.data.avatar});
+            this.props.updateProfile({...res.data});
+          })
+          .catch(err => {
+            this.setState({
+              loaded: true,
+              errors: {errors: err.response.data || ["Cannot authenticate."]},
+            });
+            console.log(err);
+          }),
+      1000
+    );
     // ISSUE:
     // Sometimes the Token hasn't been set yet, so it causes profile
     // to not properly load.
@@ -64,7 +66,7 @@ class UserProfile extends React.Component {
 
   componentDidMount() {
     this.fetch();
-    setTimeout(()=>this.setState({ reloginNoticeShow: true }), 7000);
+    setTimeout(() => this.setState({reloginNoticeShow: true}), 7000);
   }
 
   render() {
@@ -74,20 +76,25 @@ class UserProfile extends React.Component {
         <div className="user-profile-container shadow rounded">
           <h4 className="title">Loading</h4>
           <div className="loading-wrapper flex-center-col">
-            <SpinLoader className="user-profile spinloading" size={30} margin="0"/>
-            {
-              this.state.reloginNoticeShow &&
-                <em className="p-2">Hãy thử Đăng nhập lại nếu Loading mất quá nhiều thời gian.</em>
-            }
+            <SpinLoader
+              className="user-profile spinloading"
+              size={30}
+              margin="0"
+            />
+            {this.state.reloginNoticeShow && (
+              <em className="p-2">
+                Hãy thử Đăng nhập lại nếu Loading mất quá nhiều thời gian.
+              </em>
+            )}
           </div>
         </div>
-      )
+      );
     }
 
     if (!profile) {
-      this.props.clearUser()
-      toast.error("Please log-in again.", {toastId: "profile-fetch-failed"})
-      return <Navigate to="/sign-in"></Navigate>
+      this.props.clearUser();
+      toast.error("Please log-in again.", {toastId: "profile-fetch-failed"});
+      return <Navigate to="/sign-in"></Navigate>;
     }
 
     return (
@@ -95,9 +102,12 @@ class UserProfile extends React.Component {
         <h4 className="title">{profile.display_name}</h4>
         <Row className="profile-content pt-3 pb-3">
           <Col md={3} className="flex-center-col">
-            <img src={profile.avatar} className="avatar"
-                  alt={`User ${profile.user.username}'s avatar`}/>
-            <h5 className='pt-2'>{profile.user.username}</h5>
+            <img
+              src={profile.avatar}
+              className="avatar"
+              alt={`User ${profile.user.username}'s avatar`}
+            />
+            <h5 className="pt-2">{profile.user.username}</h5>
           </Col>
 
           <Col md={9} className="text-left tabs-wrapper">
@@ -115,9 +125,9 @@ class UserProfile extends React.Component {
           </Col>
         </Row>
       </div>
-    )
+    );
   }
-};
+}
 
 const mapStateToProps = state => {
   return {
@@ -126,17 +136,18 @@ const mapStateToProps = state => {
 
     myOrg: state.myOrg,
     selectedOrg: state.myOrg.selectedOrg,
-  }
-}
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateUser: (user) => dispatch(updateUser({user: user})),
-    updateProfile: (profile) => dispatch(updateProfile({profile: profile})),
+    updateUser: user => dispatch(updateUser({user: user})),
+    updateProfile: profile => dispatch(updateProfile({profile: profile})),
     clearUser: () => dispatch(clearUser()),
 
-    updateMyOrg: ({ memberOf, adminOf, selectedOrg }) => dispatch(updateMyOrg({ memberOf, adminOf, selectedOrg })),
-  }
-}
+    updateMyOrg: ({memberOf, adminOf, selectedOrg}) =>
+      dispatch(updateMyOrg({memberOf, adminOf, selectedOrg})),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);

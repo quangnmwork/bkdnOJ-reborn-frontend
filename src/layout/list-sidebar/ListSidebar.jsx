@@ -1,11 +1,9 @@
-import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import { BiArrowFromRight, BiArrowFromLeft } from 'react-icons/bi';
+import React from "react";
+import {Row, Col, Button} from "react-bootstrap";
+import {BiArrowFromRight, BiArrowFromLeft} from "react-icons/bi";
 
-import { log } from 'helpers/logger';
-
-import './ListSidebar.scss';
-import OutsideAlerter from 'helpers/OutsiderAlerter';
+import "./ListSidebar.scss";
+import OutsideAlerter from "helpers/OutsiderAlerter";
 
 class Offcanvas extends React.Component {
   render() {
@@ -13,22 +11,26 @@ class Offcanvas extends React.Component {
 
     return (
       <div id="offcanvas" className="offcanvas">
-        {
-          sideComponents.map( (comp, indx) => (
-            <div key={`side-component-${indx}`}
-              className="side-component rounded">
-              {comp}
-            </div>
-          ))
-        }
+        {sideComponents.map((comp, indx) => (
+          <div
+            key={`side-component-${indx}`}
+            className="side-component rounded"
+          >
+            {comp}
+          </div>
+        ))}
 
         <div className="offcanvasCloseBtn-wrapper">
-          <Button id="offcanvasCloseBtn" className="offcanvasCloseBtn btn-dark hidden" onClick={() => this.props.closeCanvas()}>
+          <Button
+            id="offcanvasCloseBtn"
+            className="offcanvasCloseBtn btn-dark hidden"
+            onClick={() => this.props.closeCanvas()}
+          >
             <BiArrowFromLeft />
           </Button>
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -46,39 +48,37 @@ export default class ListSidebar extends React.Component {
     super(props);
     this.state = {
       offcanvasShow: false,
-    }
+    };
   }
 
   render() {
-    const mainContent = this.props.mainContent || (<p>This is main content</p>);
-    const sideComponents = (this.props.sideComponents || [
-      (<p> Component 1 </p>),
-      (<p> Component 2 </p>),
-      (<p> Component 3 </p>),
-    ])
+    const mainContent = this.props.mainContent || <p>This is main content</p>;
+    const sideComponents = this.props.sideComponents || [];
 
     return (
       <div className="list-sidebar-wrapper">
         <Row>
           <div className="d-block d-md-none">
             <OutsideAlerter
-              children={
-                <Offcanvas
-                  closeCanvas={() => this.close()}
-                  sideComponents={sideComponents}
-                />
-              }
               isDetecting={this.state.offcanvasShow}
               outsideClickHandler={() => this.close()}
-            />
+            >
+              <Offcanvas
+                closeCanvas={() => this.close()}
+                sideComponents={sideComponents}
+              />
+            </OutsideAlerter>
           </div>
 
           <Col md={8}>
             <div className="offcanvas-menu" id="offcanvas-menu">
-              { mainContent }
+              {mainContent}
 
               <div className="offcanvasOpenBtn-wrapper">
-                <Button className="offcanvasOpenBtn btn-dark d-block d-md-none" onClick={() => this.toggle()}>
+                <Button
+                  className="offcanvasOpenBtn btn-dark d-block d-md-none"
+                  onClick={() => this.toggle()}
+                >
                   <BiArrowFromRight />
                 </Button>
               </div>
@@ -86,19 +86,15 @@ export default class ListSidebar extends React.Component {
           </Col>
 
           <Col md={4} className="side-bar center d-none d-md-flex">
-            {
-              sideComponents.map( (comp, indx) => (
-                <div key={`side-component-${indx}`} className="mb-2">
-                  <div className="side-component">
-                    {comp}
-                  </div>
-                </div>
-              ))
-            }
+            {sideComponents.map((comp, indx) => (
+              <div key={`side-component-${indx}`} className="mb-2">
+                <div className="side-component">{comp}</div>
+              </div>
+            ))}
           </Col>
         </Row>
       </div>
-    )
+    );
   }
 
   toggle() {
@@ -109,18 +105,18 @@ export default class ListSidebar extends React.Component {
 
   open() {
     this.setState({offcanvasShow: true}, () => {
-      const sidenav = document.getElementById("offcanvas")
+      const sidenav = document.getElementById("offcanvas");
       if (sidenav) sidenav.style.width = "350px";
       // const main = document.getElementById("offcanvas-menu")
       // if (main) main.style.marginRight = "250px";
-    })
+    });
   }
   close() {
     this.setState({offcanvasShow: false}, () => {
-      const sidenav = document.getElementById("offcanvas")
+      const sidenav = document.getElementById("offcanvas");
       if (sidenav) sidenav.style.width = "0";
       // const main = document.getElementById("offcanvas-menu")
       // if (main) main.style.marginRight = "0";
-    })
+    });
   }
-};
+}

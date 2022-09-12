@@ -6,19 +6,11 @@ import {unstable_HistoryRouter as HistoryRouter} from "react-router-dom";
 import {createBrowserHistory} from "history";
 
 // Helpers
-import ScrollToTop from "helpers/react-router/ScrollToTop";
 
 // Components
 import {ListSidebar, OneColumn} from "layout";
 
-import {
-  Content,
-  ContestSidebar,
-  SubFilterSidebar,
-  RecentSubmissionSidebar,
-} from "components";
-
-import PDFViewer from "components/PDFViewer/PDFViewer";
+import {Content, SubFilterSidebar, RecentSubmissionSidebar} from "components";
 
 import {SignIn, SignUp, SignOut, UserProfile} from "pages";
 import {
@@ -27,7 +19,6 @@ import {
   ProblemList,
   ProblemDetails,
   JudgeStatuses,
-  Submit,
   ContestList,
   ContestApp,
   ContestStanding,
@@ -56,7 +47,6 @@ import {
 } from "pages/admin";
 
 import UserApp from "pages/user/UserApp";
-import {setTitle} from "helpers/setTitle";
 
 // Styles
 import "App.scss";
@@ -233,7 +223,7 @@ class App extends React.Component {
                 <ListSidebar
                   mainContent={<SubmissionList />}
                   sideComponents={[
-                    <SubFilterSidebar/>,
+                    <SubFilterSidebar key={"SubFilterSidebar"} />,
                   ]}
                 />
               }
@@ -269,7 +259,11 @@ class App extends React.Component {
                 element={
                   <ListSidebar
                     mainContent={<ProblemList />}
-                    sideComponents={[<RecentSubmissionSidebar />]}
+                    sideComponents={[
+                      <RecentSubmissionSidebar
+                        key={"RecentSubmissionSidebar"}
+                      />,
+                    ]}
                   />
                 }
               />
@@ -278,7 +272,11 @@ class App extends React.Component {
                 element={
                   <ListSidebar
                     mainContent={<ProblemDetails />}
-                    sideComponents={[<RecentSubmissionSidebar />]}
+                    sideComponents={[
+                      <RecentSubmissionSidebar
+                        key={"RecentSubmissionSidebar"}
+                      />,
+                    ]}
                   />
                 }
               />
@@ -288,8 +286,10 @@ class App extends React.Component {
                   <ListSidebar
                     mainContent={<SubmissionList />}
                     sideComponents={[
-                      <SubFilterSidebar/>,
-                      <RecentSubmissionSidebar />,
+                      <SubFilterSidebar key={"SubFilterSidebar"} />,
+                      <RecentSubmissionSidebar
+                        key={"RecentSubmissionSidebar"}
+                      />,
                     ]}
                   />
                 }
@@ -299,7 +299,11 @@ class App extends React.Component {
                 element={
                   <ListSidebar
                     mainContent={<SubmissionDetails />}
-                    sideComponents={[<RecentSubmissionSidebar />]}
+                    sideComponents={[
+                      <RecentSubmissionSidebar
+                        key={"RecentSubmissionSidebar"}
+                      />,
+                    ]}
                   />
                 }
               />

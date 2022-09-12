@@ -16,19 +16,22 @@ import submissionApi from "api/submission";
 import contestApi from "api/contest";
 
 // Assets
-import {FaRegEyeSlash, FaRedoAlt, FaSyncAlt, FaFilter, FaPlus} from "react-icons/fa";
+import {
+  FaRegEyeSlash,
+  FaRedoAlt,
+  FaSyncAlt,
+  FaFilter,
+  FaPlus,
+} from "react-icons/fa";
 import {GiTrophyCup} from "react-icons/gi";
 import {TbFilterOff} from "react-icons/tb";
 // import { FaPaperPlane } from 'react-icons/fa';
 
 // Helpers
-import dateFormatter, {
-  getYearMonthDate,
-  getHourMinuteSecond,
-} from "helpers/dateFormatter";
+import {getYearMonthDate, getHourMinuteSecond} from "helpers/dateFormatter";
 import {setTitle} from "helpers/setTitle";
 import {parseTime, parseMem} from "helpers/textFormatter";
-import {isLoggedIn, isStaff, isSuperUser} from "helpers/auth";
+import {isStaff} from "helpers/auth";
 import {isEmpty} from "helpers/checkObject";
 
 // Contexts
@@ -69,9 +72,10 @@ class FilterPlus extends React.Component {
         to="#"
         {...this.props}
       >
-        <FaFilter size={10}/><FaPlus size={8}/>
+        <FaFilter size={10} />
+        <FaPlus size={8} />
       </Link>
-    )
+    );
   }
 }
 
@@ -108,7 +112,6 @@ class SubListItem extends React.Component {
 
     const verdict = status === "D" ? result : status;
 
-    const max_time = problem.time_limit;
     const max_points = problem.points;
 
     const isSpectatorSubmission = virtual && !(virtual === "live");
@@ -133,11 +136,14 @@ class SubListItem extends React.Component {
         <td className="general-info">
           <div className="general-info-container">
             <span className="problem">
-              <Link to={`${linkPrefix}/problem/${problem.shortname}`}
-              >
+              <Link to={`${linkPrefix}/problem/${problem.shortname}`}>
                 {problem.title}
               </Link>
-              <FilterPlus onClick={()=>this.props.setFilterParams('problem', problem.shortname)}/>
+              <FilterPlus
+                onClick={() =>
+                  this.props.setFilterParams("problem", problem.shortname)
+                }
+              />
             </span>
             {contest_object && (
               <span
@@ -164,7 +170,9 @@ class SubListItem extends React.Component {
                     <span>{user}</span>
                   )}
                 </Link>
-                <FilterPlus onClick={()=>this.props.setFilterParams('user', user)}/>
+                <FilterPlus
+                  onClick={() => this.props.setFilterParams("user", user)}
+                />
               </em>
               <span className="language ml-1">({language})</span>
             </span>
@@ -318,7 +326,7 @@ class SubmissionList extends React.Component {
     } else this.callApi({page: this.state.currPage});
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (prevProps.selectedOrg !== this.props.selectedOrg) {
       this.callApi();
     }
@@ -372,7 +380,7 @@ class SubmissionList extends React.Component {
     request
       .then(() => {
         toast.success(messages.toast.rejudging.getOK());
-        this.callApi()
+        this.callApi();
       })
       .catch(err => {
         toast.error(
@@ -385,8 +393,9 @@ class SubmissionList extends React.Component {
 
   setFilterParams(key, value) {
     const {contest} = this.context;
-    const oldParams = this.props.subFilter[ !!contest ? contest.key : NO_CONTEST_KEY ];
-    const newParams = {...oldParams, [key]: value}
+    const oldParams =
+      this.props.subFilter[contest ? contest.key : NO_CONTEST_KEY];
+    const newParams = {...oldParams, [key]: value};
     if (contest) this.props.setContestParams(contest.key, newParams);
     else this.props.setPublicParams(newParams);
   }
@@ -435,7 +444,9 @@ class SubmissionList extends React.Component {
           </Button>
         </div>
         <div className="submission-count-text">
-          <span className="count-text"><span className="number">{count || "?"}</span> sub(s)</span>
+          <span className="count-text">
+            <span className="number">{count || "?"}</span> sub(s)
+          </span>
         </div>
         <h4>Submissions</h4>
 
@@ -469,7 +480,9 @@ class SubmissionList extends React.Component {
                         rowid={idx}
                         {...sub}
                         yourUsername={username}
-                        setFilterParams={(key, value) => this.setFilterParams(key, value)}
+                        setFilterParams={(key, value) =>
+                          this.setFilterParams(key, value)
+                        }
                       />
                     ))
                   ) : (

@@ -6,7 +6,7 @@ class Submission extends React.Component {
       <h4> Submission </h4>
     )
   }
-};
+}
 
 let wrapped = Submission;
 export default wrapped;

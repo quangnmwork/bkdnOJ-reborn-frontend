@@ -1,19 +1,16 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
-import {Link} from "react-router-dom";
 import {Button, Table} from "react-bootstrap";
 
 import {SpinLoader, ErrorBox, UserCard} from "components";
 import SubListModal from "./SubListModal";
 import StandingFilter from "./StandingFilter";
 
-import submissionApi from "api/submission";
 import contestAPI from "api/contest";
 
 // Helpers
 import {setTitle} from "helpers/setTitle";
-import {getPollDelay} from "helpers/polling";
 import {getLocalDateWithTimezone} from "helpers/dateFormatter";
 
 // Assets
@@ -29,7 +26,6 @@ import {BiTargetLock} from "react-icons/bi";
 
 // Contexts
 import ContestContext from "context/ContestContext";
-import shuffle from "helpers/shuffle";
 
 // Styles
 import "./ContestStanding.scss";
@@ -59,12 +55,8 @@ class StandingItem extends React.Component {
       user,
       score,
       cumtime,
-      tiebreaker,
       frozen_score,
       frozen_cumtime,
-      frozen_tiebreaker,
-      is_disqualified,
-      virtual,
       format_data,
       isFavorite,
       filteredRank,
@@ -120,7 +112,7 @@ class StandingItem extends React.Component {
         );
       });
 
-    let showScore, showCumtime, showTiebreaker;
+    let showScore, showCumtime;
     if (isFrozen) {
       showScore = frozen_score;
       showCumtime = frozen_cumtime;
@@ -391,7 +383,6 @@ class ContestStanding extends React.Component {
   render() {
     const {
       loaded,
-      errors,
       problems,
       standing,
       frozenEnabled,
@@ -401,7 +392,6 @@ class ContestStanding extends React.Component {
       displayMode,
       scoreboardCache,
       iceBroken,
-      isPollingOn,
       isPolling,
     } = this.state;
 

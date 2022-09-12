@@ -1,32 +1,40 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import AsyncSelect from 'react-select/async';
+import React from "react";
 
-import userAPI from 'api/user';
+import AsyncSelect from "react-select/async";
 
-const UserSelectLabel = (props) => {
-  const {username, first_name, last_name, is_active, is_staff, is_superuser} = props;
+import userAPI from "api/user";
 
-  let boundColor = 'bg-dark', boundText = 'user';
+const UserSelectLabel = props => {
+  const {username, first_name, last_name, is_active, is_staff, is_superuser} =
+    props;
+
+  let boundColor = "bg-dark",
+    boundText = "user";
   if (!is_active) {
-    boundColor = 'bg-secondary'; boundText = 'inactive';
-  } else
-  if (is_staff || is_superuser) {
-    boundColor = 'bg-danger'; boundText = (is_superuser ? 'admin' : 'staff');
+    boundColor = "bg-secondary";
+    boundText = "inactive";
+  } else if (is_staff || is_superuser) {
+    boundColor = "bg-danger";
+    boundText = is_superuser ? "admin" : "staff";
   }
 
   return (
-    <div className="user-choice text-left d-flex flex-column" style={{
-      fontSize: "14px",
-    }}>
+    <div
+      className="user-choice text-left d-flex flex-column"
+      style={{
+        fontSize: "14px",
+      }}
+    >
       <span>
-        <span className={`rounded text-light pl-1 pr-1 mr-1 ${boundColor}`}>{boundText}</span>
+        <span className={`rounded text-light pl-1 pr-1 mr-1 ${boundColor}`}>
+          {boundText}
+        </span>
         {username}
       </span>
       <span style={{fontSize: "10px"}}>{`${first_name} ${last_name}`}</span>
     </div>
   );
-}
+};
 
 export default class UserMultiSelect extends React.Component {
   constructor(props) {
@@ -34,46 +42,46 @@ export default class UserMultiSelect extends React.Component {
   }
 
   async loadOptions(val) {
-    return userAPI.getUsers({params: {search: val}})
-    .then((res) => {
-      let data = res.data.results.map((user) => ({
+    return userAPI.getUsers({params: {search: val}}).then(res => {
+      let data = res.data.results.map(user => ({
         value: user.username,
-        label: <UserSelectLabel {...user}/>,
+        label: <UserSelectLabel {...user} />,
         data: user,
       }));
       return data;
-    })
+    });
   }
 
   render() {
     const users = this.props.value;
 
-    return(
+    return (
       <>
         <AsyncSelect
           isMulti
           cacheOptions
           // defaultOptions
           placeholder="Tìm username/first name/last name..."
-          noOptionsMessage={()=>("Hệ thống chỉ trả về 20 users khớp tìm kiếm nhất. "+
-              "Hãy thử đổi nội dung tìm nếu không tìm thấy User mong muốn.")}
-
-          loadOptions={(val) => this.loadOptions(val)}
-          onChange={(sel) => this.props.onChange(
-              sel.map((select)=>({...select.data}))
-          )}
-
-          value = {
-            users.map((user) => ({ value: user.username, label: <UserSelectLabel {...user}/>, data: user }))
+          noOptionsMessage={() =>
+            "Hệ thống chỉ trả về 20 users khớp tìm kiếm nhất. " +
+            "Hãy thử đổi nội dung tìm nếu không tìm thấy User mong muốn."
           }
-
-          styles = {{
+          loadOptions={val => this.loadOptions(val)}
+          onChange={sel =>
+            this.props.onChange(sel.map(select => ({...select.data})))
+          }
+          value={users.map(user => ({
+            value: user.username,
+            label: <UserSelectLabel {...user} />,
+            data: user,
+          }))}
+          styles={{
             container: () => ({
               width: "100%",
-            })
+            }),
           }}
         />
       </>
-    )
+    );
   }
 }

@@ -1,37 +1,44 @@
-import React from 'react';
-import ReactPaginate from 'react-paginate';
-import { toast } from 'react-toastify';
-import { Navigate, Link } from 'react-router-dom';
-import { Button, Table } from 'react-bootstrap';
+import React from "react";
+import ReactPaginate from "react-paginate";
+import {Navigate, Link} from "react-router-dom";
+import {Button, Table} from "react-bootstrap";
 
 /* icons */
-import { AiOutlineForm, AiOutlineUpload, AiOutlineArrowRight, AiOutlinePlusCircle } from 'react-icons/ai';
+import {
+  AiOutlineForm,
+  AiOutlineArrowRight,
+  AiOutlinePlusCircle,
+} from "react-icons/ai";
 
 /* my imports */
-import { SpinLoader, ErrorBox, FileUploader } from 'components';
-import userAPI from 'api/user';
-import { setTitle } from 'helpers/setTitle';
+import {SpinLoader, ErrorBox} from "components";
+import userAPI from "api/user";
+import {setTitle} from "helpers/setTitle";
 
-import './List.scss'
-import 'styles/ClassicPagination.scss';
-import { qmClarify } from 'helpers/components';
+import "./List.scss";
+import "styles/ClassicPagination.scss";
+import {qmClarify} from "helpers/components";
 
 class UserItem extends React.Component {
   render() {
-    const { id, username, email, is_active, is_staff, is_superuser, date_joined, last_login } = this.props;
-    const {rowidx, selectChk, onSelectChkChange} = this.props;
+    const {
+      id,
+      username,
+      email,
+      is_active,
+      is_staff,
+      is_superuser,
+      date_joined,
+    } = this.props;
+    const {selectChk, onSelectChkChange} = this.props;
 
     return (
       <tr>
         <td className="text-truncate" style={{maxWidth: "20px"}}>
-          <Link to={`/admin/user/${id}`}>
-            {id}
-          </Link>
+          <Link to={`/admin/user/${id}`}>{id}</Link>
         </td>
         <td className="text-truncate" style={{maxWidth: "40px"}}>
-          <Link to={`/admin/user/${id}`}>
-            {username}
-          </Link>
+          <Link to={`/admin/user/${id}`}>{username}</Link>
         </td>
         <td className="text-truncate" style={{maxWidth: "100px"}}>
           {email}
@@ -47,11 +54,14 @@ class UserItem extends React.Component {
         </td> */}
 
         <td>
-            <input type="checkbox" value={selectChk}
-              onChange={() => onSelectChkChange()}/>
+          <input
+            type="checkbox"
+            value={selectChk}
+            onChange={() => onSelectChkChange()}
+          />
         </td>
       </tr>
-    )
+    );
   }
 }
 
@@ -68,27 +78,29 @@ class AdminUserList extends React.Component {
       errors: null,
 
       submitting: false,
-    }
-    setTitle('Admin | Users')
+    };
+    setTitle("Admin | Users");
   }
 
   selectChkChangeHandler(idx) {
     const {selectChk} = this.state;
-    if (idx >= selectChk.length)
-      console.log('Invalid delete tick position');
+    if (idx >= selectChk.length) console.log("Invalid delete tick position");
     else {
       const val = selectChk[idx];
       this.setState({
-        selectChk: selectChk.slice(0, idx).concat(!val, selectChk.slice(idx+1))
-      })
+        selectChk: selectChk
+          .slice(0, idx)
+          .concat(!val, selectChk.slice(idx + 1)),
+      });
     }
   }
 
   callApi(params) {
-    this.setState({loaded: false, errors: null})
+    this.setState({loaded: false, errors: null});
 
-    userAPI.getUsers({params: {page: params.page+1}})
-      .then((res) => {
+    userAPI
+      .getUsers({params: {page: params.page + 1}})
+      .then(res => {
         this.setState({
           objects: res.data.results,
           count: res.data.count,
@@ -97,160 +109,199 @@ class AdminUserList extends React.Component {
 
           selectChk: Array(res.data.results.length).fill(false),
           loaded: true,
-        })
+        });
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
           loaded: true,
           errors: ["Cannot fetch Users. Please retry again."],
-        })
-      })
+        });
+      });
   }
 
   componentDidMount() {
     this.callApi({page: this.state.currPage});
   }
 
-  handlePageClick = (event) => {
+  handlePageClick = event => {
     this.callApi({page: event.selected});
-  }
+  };
 
   handleDeleteSelect(e) {
     e.preventDefault();
-    this.setState({ errors: null })
+    this.setState({errors: null});
 
     let ids = [];
-    let usernames = []
+    let usernames = [];
     this.state.selectChk.forEach((v, i) => {
       if (v) {
-        ids.push(this.state.objects[i].id)
-        usernames.push(this.state.objects[i].username)
+        ids.push(this.state.objects[i].id);
+        usernames.push(this.state.objects[i].username);
       }
-    })
+    });
 
     if (ids.length === 0) {
-      alert('Không có User nào đang được chọn.');
+      alert("Không có User nào đang được chọn.");
       return;
     }
 
     // TODO: Write a bulk delete API for submissions
-    const conf = window.confirm('Xóa các User ' + JSON.stringify(usernames) + '?');
+    const conf = window.confirm(
+      "Xóa các User " + JSON.stringify(usernames) + "?"
+    );
     if (conf) {
-      let reqs = []
-      ids.forEach((id) => {
-        reqs.push( userAPI.adminDeleteUser({id}) )
-      })
+      let reqs = [];
+      ids.forEach(id => {
+        reqs.push(userAPI.adminDeleteUser({id}));
+      });
 
-      Promise.all(reqs).then((res) => {
-        this.callApi({page: this.state.currPage});
-      }).catch((err) => {
-        let msg = 'Không thể xóa các User này.';
-        if (err.response) {
-          if (err.response.status === 405)
-            msg += ' Phương thức chưa được hỗ trợ.';
-          if (err.response.status === 404)
-            msg = 'Không tìm thấy một trong số User được chọn. Có lẽ họ đã bị xóa?'
-          if ([403, 401].includes(err.response.status))
-            msg += ' Bạn không có quyền cho thao tác này.';
-        }
-        this.setState({ errors: {errors: msg} })
-      })
+      Promise.all(reqs)
+        .then(() => {
+          this.callApi({page: this.state.currPage});
+        })
+        .catch(err => {
+          let msg = "Không thể xóa các User này.";
+          if (err.response) {
+            if (err.response.status === 405)
+              msg += " Phương thức chưa được hỗ trợ.";
+            if (err.response.status === 404)
+              msg =
+                "Không tìm thấy một trong số User được chọn. Có lẽ họ đã bị xóa?";
+            if ([403, 401].includes(err.response.status))
+              msg += " Bạn không có quyền cho thao tác này.";
+          }
+          this.setState({errors: {errors: msg}});
+        });
     }
   }
 
   render() {
     if (this.state.redirectUrl)
-      return ( <Navigate to={`${this.state.redirectUrl}`} /> )
+      return <Navigate to={`${this.state.redirectUrl}`} />;
 
-    const { submitting } = this.state;
+    const {submitting} = this.state;
 
     return (
       <div className="admin admin-users">
-      {/* Options for Admins: Create New,.... */}
-      <div className="admin-options m-0 wrapper-vanilla">
-        <div className="border d-inline-flex p-1" >
-        <Button size="sm"
-          variant="dark" className="btn-svg" disabled={ submitting }
-          onClick={(e) => this.setState({ redirectUrl: 'new' })}
-        >
-          <AiOutlinePlusCircle />
-          <span className="d-none d-md-inline-flex">Add (Form)</span>
-          <span className="d-inline-flex d-md-none">
-            <AiOutlineArrowRight/>
-            <AiOutlineForm />
-          </span>
-        </Button>
+        {/* Options for Admins: Create New,.... */}
+        <div className="admin-options m-0 wrapper-vanilla">
+          <div className="border d-inline-flex p-1">
+            <Button
+              size="sm"
+              variant="dark"
+              className="btn-svg"
+              disabled={submitting}
+              onClick={() => this.setState({redirectUrl: "new"})}
+            >
+              <AiOutlinePlusCircle />
+              <span className="d-none d-md-inline-flex">Add (Form)</span>
+              <span className="d-inline-flex d-md-none">
+                <AiOutlineArrowRight />
+                <AiOutlineForm />
+              </span>
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* Place for displaying information about admin actions  */}
-      <div className="admin-note text-center mb-1">
-        {
-          submitting && <span className="loading_3dot">Đang xử lý yêu cầu</span>
-        }
-      </div>
+        {/* Place for displaying information about admin actions  */}
+        <div className="admin-note text-center mb-1">
+          {submitting && (
+            <span className="loading_3dot">Đang xử lý yêu cầu</span>
+          )}
+        </div>
 
-      {/* Problem List */}
-      <div className="admin-table user-table wrapper-vanilla">
-        <h4>User List</h4>
-        <ErrorBox errors={this.state.errors} />
-        <Table responsive hover size="sm" striped bordered className="rounded">
-          <thead>
-            <tr>
-              <th >ID</th>
-              <th >Username</th>
-              <th >Email</th>
-              <th >
-                Active{qmClarify("Tài khoản không Active sẽ không được phép đăng nhập.")}
-              </th>
-              <th >
-                Staff{qmClarify("Tài khoản là Staff sẽ truy cập được vào trang Admin.")}
-              </th>
-              <th >
-                Superuser{qmClarify("Tài khoản là Superuser sẽ có toàn quyền trên hệ thống.")}
-              </th>
-              <th >Joined</th>
-              {/* <th >Last seen</th> */}
-              <th style={{width: "8%"}}>
-                <Link to="#" onClick={(e) => this.handleDeleteSelect(e)}>Delete</Link>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              this.state.loaded === false && <tr><td colSpan="99"><SpinLoader margin="10px" /></td></tr>
-            }{
-              this.state.loaded === true ? (
-                this.state.objects.map((obj, idx) => <UserItem
+        {/* Problem List */}
+        <div className="admin-table user-table wrapper-vanilla">
+          <h4>User List</h4>
+          <ErrorBox errors={this.state.errors} />
+          <Table
+            responsive
+            hover
+            size="sm"
+            striped
+            bordered
+            className="rounded"
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>
+                  Active
+                  {qmClarify(
+                    "Tài khoản không Active sẽ không được phép đăng nhập."
+                  )}
+                </th>
+                <th>
+                  Staff
+                  {qmClarify(
+                    "Tài khoản là Staff sẽ truy cập được vào trang Admin."
+                  )}
+                </th>
+                <th>
+                  Superuser
+                  {qmClarify(
+                    "Tài khoản là Superuser sẽ có toàn quyền trên hệ thống."
+                  )}
+                </th>
+                <th>Joined</th>
+                {/* <th >Last seen</th> */}
+                <th style={{width: "8%"}}>
+                  <Link to="#" onClick={e => this.handleDeleteSelect(e)}>
+                    Delete
+                  </Link>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.loaded === false && (
+                <tr>
+                  <td colSpan="99">
+                    <SpinLoader margin="10px" />
+                  </td>
+                </tr>
+              )}
+              {this.state.loaded === true ? (
+                this.state.objects.map((obj, idx) => (
+                  <UserItem
                     key={`user-${obj.username}`}
-                    rowidx={idx} {...obj}
+                    rowidx={idx}
+                    {...obj}
                     selectChk={this.state.selectChk[idx]}
                     onSelectChkChange={() => this.selectChkChangeHandler(idx)}
-                  />)
+                  />
+                ))
               ) : (
-                <tr><td colSpan={99}><em>No User can be found.</em></td></tr>
-              )
-            }
-          </tbody>
-        </Table>
-        {
-          this.state.loaded === false
-            ? <SpinLoader margin="0" />
-            : <span className="classic-pagination">Page: <ReactPaginate
+                <tr>
+                  <td colSpan={99}>
+                    <em>No User can be found.</em>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+          {this.state.loaded === false ? (
+            <SpinLoader margin="0" />
+          ) : (
+            <span className="classic-pagination">
+              Page:{" "}
+              <ReactPaginate
                 breakLabel="..."
                 onPageChange={this.handlePageClick}
                 forcePage={this.state.currPage}
-                pageLabelBuilder={(page) => `[${page}]`}
+                pageLabelBuilder={page => `[${page}]`}
                 pageRangeDisplayed={3}
                 pageCount={this.state.pageCount}
                 renderOnZeroPageCount={null}
                 previousLabel={null}
                 nextLabel={null}
-                /></span>
-        }
+              />
+            </span>
+          )}
+        </div>
       </div>
-      </div>
-    )
+    );
   }
 }
 

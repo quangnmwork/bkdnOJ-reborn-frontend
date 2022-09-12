@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 
 // Redux
@@ -11,14 +12,11 @@ import {
 
 import {NO_CONTEST_KEY} from "redux/SubFilter/types";
 
-import {Button, Table, Row, Col} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Button, Row, Col} from "react-bootstrap";
 
-import {ErrorBox, SpinLoader} from "components";
 import ContestContext from "context/ContestContext";
 
 // Helpers
-import {getHourMinuteSecond, getYearMonthDate} from "helpers/dateFormatter";
 
 // Assets
 import {FaTimes, FaFilter} from "react-icons/fa";
@@ -113,11 +111,11 @@ class ContestSubFilterSidebar extends React.Component {
   getTime(key) {
     const data = this.state.queryParams;
     if (data && data[key]) {
-      let time = new Date(data[key])
+      let time = new Date(data[key]);
       time.setMinutes(time.getMinutes() - time.getTimezoneOffset());
       return time.toISOString().slice(0, 19);
     }
-    return '';
+    return "";
   }
 
   onFilter() {
@@ -153,8 +151,7 @@ class ContestSubFilterSidebar extends React.Component {
     this.initFromRedux();
   }
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.subFilter !== prevProps.subFilter)
-      this.initFromRedux();
+    if (this.props.subFilter !== prevProps.subFilter) this.initFromRedux();
   }
 
   render() {
@@ -337,12 +334,17 @@ class ContestSubFilterSidebar extends React.Component {
                         {ord.name}
                       </option>
                     ))}
-                    {isStaff && <>
-                      <option key={`ct-fltr-ln-rjd`} value="rejudged_date" className="text-danger">
-                        Rejudge Date
-                      </option>
-                    </>
-                    }
+                    {isStaff && (
+                      <>
+                        <option
+                          key={`ct-fltr-ln-rjd`}
+                          value="rejudged_date"
+                          className="text-danger"
+                        >
+                          Rejudge Date
+                        </option>
+                      </>
+                    )}
                   </select>
                 </Col>
                 <Col xs={4}>

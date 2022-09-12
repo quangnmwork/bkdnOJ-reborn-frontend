@@ -1,10 +1,6 @@
-import React from 'react';
-import { toast } from 'react-toastify';
-import { Link, Navigate } from 'react-router-dom';
-import { Form, Accordion, Button, Table, Row, Col } from 'react-bootstrap';
-import { ErrorBox, SpinLoader } from 'components'
-
-import problemAPI from 'api/problem';
+import React from "react";
+import {Form, Accordion, Table, Row, Col} from "react-bootstrap";
+import {ErrorBox, SpinLoader} from "components";
 
 class ButtonPanel extends React.Component {
   render() {
@@ -13,22 +9,19 @@ class ButtonPanel extends React.Component {
         <Col lg={10}>
           <sub>**Chưa thể chỉnh sửa.</sub>
         </Col>
-        <Col >
+        <Col>
           {/* <Button variant="dark" size="sm" type="submit" disabled>
             No Op
           </Button> */}
         </Col>
       </Row>
-    )
+    );
   }
 }
 
 class TestcaseItem extends React.Component {
   render() {
-    const {
-      rowidx,
-      id, status, time, memory, points, total
-    } = this.props;
+    const {id, status, time, memory, points, total} = this.props;
     const case_no = this.props.case;
 
     return (
@@ -41,7 +34,7 @@ class TestcaseItem extends React.Component {
         <td>{points}</td>
         <td>{total}</td>
       </tr>
-    )
+    );
   }
 }
 
@@ -53,14 +46,17 @@ export default class TestcaseDetails extends React.Component {
       data: null,
       loaded: false,
       errors: null,
-    }
+    };
   }
 
   render() {
-    const { data } = this.props;
-    if (!data) return (
-      <div className="center"><SpinLoader margin="10px" /></div>
-    )
+    const {data} = this.props;
+    if (!data)
+      return (
+        <div className="center">
+          <SpinLoader margin="10px" />
+        </div>
+      );
 
     const testcases = data.test_cases;
 
@@ -72,31 +68,67 @@ export default class TestcaseDetails extends React.Component {
             <Accordion.Header>Verdict</Accordion.Header>
             <Accordion.Body>
               <Row>
-                <Form.Label column="sm" lg={3}> Result </Form.Label>
+                <Form.Label column="sm" lg={3}>
+                  {" "}
+                  Result{" "}
+                </Form.Label>
                 <Col>
-                  <Form.Control type="text" size="sm"
-                    id="source" defaultValue={data.result} disabled readOnly />
+                  <Form.Control
+                    type="text"
+                    size="sm"
+                    id="source"
+                    defaultValue={data.result}
+                    disabled
+                    readOnly
+                  />
                 </Col>
               </Row>
               <Row>
-                <Form.Label column="sm" lg={3}> Status </Form.Label>
+                <Form.Label column="sm" lg={3}>
+                  {" "}
+                  Status{" "}
+                </Form.Label>
                 <Col>
-                  <Form.Control type="text" size="sm"
-                    id="status" defaultValue={data.status} disabled readOnly />
+                  <Form.Control
+                    type="text"
+                    size="sm"
+                    id="status"
+                    defaultValue={data.status}
+                    disabled
+                    readOnly
+                  />
                 </Col>
               </Row>
               <Row>
-                <Form.Label column="sm" lg={3}> Error </Form.Label>
+                <Form.Label column="sm" lg={3}>
+                  {" "}
+                  Error{" "}
+                </Form.Label>
                 <Col>
-                  <Form.Control as="textarea" size="sm"
-                    id="error" defaultValue={data.error} disabled readOnly />
+                  <Form.Control
+                    as="textarea"
+                    size="sm"
+                    id="error"
+                    defaultValue={data.error}
+                    disabled
+                    readOnly
+                  />
                 </Col>
               </Row>
               <Row>
-                <Form.Label column="sm" lg={3}> Points </Form.Label>
+                <Form.Label column="sm" lg={3}>
+                  {" "}
+                  Points{" "}
+                </Form.Label>
                 <Col>
-                  <Form.Control type="text" size="sm"
-                    id="points" defaultValue={data.points} disabled readOnly />
+                  <Form.Control
+                    type="text"
+                    size="sm"
+                    id="points"
+                    defaultValue={data.points}
+                    disabled
+                    readOnly
+                  />
                 </Col>
               </Row>
             </Accordion.Body>
@@ -105,7 +137,14 @@ export default class TestcaseDetails extends React.Component {
           <Accordion.Item eventKey="1" className="cases">
             <Accordion.Header>Case Results</Accordion.Header>
             <Accordion.Body>
-              <Table responsive hover size="sm" striped bordered className="rounded text-center">
+              <Table
+                responsive
+                hover
+                size="sm"
+                striped
+                bordered
+                className="rounded text-center"
+              >
                 <thead>
                   <tr>
                     <th style={{width: "5%"}}>#</th>
@@ -118,12 +157,9 @@ export default class TestcaseDetails extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {
-                       testcases.map((tc, idx) => <TestcaseItem
-                          key={`tc-${tc.id}`}
-                          rowidx={idx} {...tc}
-                        />)
-                  }
+                  {testcases.map((tc, idx) => (
+                    <TestcaseItem key={`tc-${tc.id}`} rowidx={idx} {...tc} />
+                  ))}
                 </tbody>
               </Table>
             </Accordion.Body>
@@ -134,6 +170,6 @@ export default class TestcaseDetails extends React.Component {
 
         <ButtonPanel />
       </Form>
-    )
+    );
   }
 }

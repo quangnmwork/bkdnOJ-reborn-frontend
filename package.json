@@ -49,7 +49,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "eslint --fix --ext .js,.jsx src"
   },
   "eslintConfig": {
     "extends": [
@@ -68,5 +69,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.23.0",
+    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-unused-imports": "^2.0.0"
   }
 }
