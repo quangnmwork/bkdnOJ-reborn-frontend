@@ -1,0 +1,35 @@
+import PropTypes from "prop-types";
+
+export const SubmissionTestCaseProps = {
+  data: PropTypes.shape({
+    id: PropTypes.string,
+    case: PropTypes.number,
+    status: PropTypes.string,
+    time: PropTypes.number,
+    memory: PropTypes.number,
+    points: PropTypes.number,
+    total: PropTypes.number,
+    batch: PropTypes.any,
+    feedback: PropTypes.string,
+    extended_feedback: PropTypes.string,
+    output: PropTypes.string,
+  }),
+  maxTime: PropTypes.string,
+  problem: PropTypes.shape({
+    solved: PropTypes.bool,
+    attempted: null,
+    shortname: PropTypes.string,
+    title: PropTypes.string,
+    attempted_count: PropTypes.number,
+    solved_count: PropTypes.number,
+    points: PropTypes.number,
+    partial: PropTypes.bool,
+    short_circuit: PropTypes.bool,
+    is_public: PropTypes.bool,
+    is_organization_private: PropTypes.number,
+    time_limit: PropTypes.number,
+    memory_limit: PropTypes.number,
+    created: PropTypes.string,
+    modified: PropTypes.string,
+  }),
+};

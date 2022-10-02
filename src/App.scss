@@ -1,9 +1,9 @@
-@import 'global.scss';
+@import "global.scss";
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -16,13 +16,21 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
   padding-left: 3px;
   padding-right: 3px;
 }
+pre {
+  margin-bottom: 0;
+  white-space: pre;
+}
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   color: $base;
 }
 
@@ -72,7 +80,7 @@ div.wrapper-vanilla {
   padding: unset;
   border: solid 2px $base;
   background-color: $sub;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   border-radius: 0.25rem !important;
 }
 
@@ -91,7 +99,7 @@ div.wrapper-vanilla {
 }
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   // background: $base;
 }
@@ -122,25 +130,41 @@ div.wrapper-vanilla {
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/_buttons.scss";
 .btn-dark {
-  @include button-variant($base, darken($base, 7.5%), darken($base, 10%), lighten($base,5%), lighten($base, 10%), darken($base,30%));
+  @include button-variant(
+    $base,
+    darken($base, 7.5%),
+    darken($base, 10%),
+    lighten($base, 5%),
+    lighten($base, 10%),
+    darken($base, 30%)
+  );
   color: $sub;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     color: $sub;
   }
 }
 .btn-outline-dark {
-  @include button-outline-variant($base, #222222, lighten($base,5%), $base);
+  @include button-outline-variant($base, #222222, lighten($base, 5%), $base);
   color: $sub;
 }
 .btn-light {
-  @include button-variant($sub, darken($sub, 7.5%), darken($sub, 10%), lighten($sub,5%), lighten($sub, 10%), darken($sub,30%));
+  @include button-variant(
+    $sub,
+    darken($sub, 7.5%),
+    darken($sub, 10%),
+    lighten($sub, 5%),
+    lighten($sub, 10%),
+    darken($sub, 30%)
+  );
   color: $base;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     color: $base;
   }
 }
 .btn-outline-light {
-  @include button-outline-variant($sub, #222222, lighten($sub,5%), $sub);
+  @include button-outline-variant($sub, #222222, lighten($sub, 5%), $sub);
   color: $base;
 }
 
@@ -181,25 +205,39 @@ div.wrapper-vanilla {
 }
 .loading_3dot::after {
   display: inline-block;
-  animation: dotty steps(1,end) 1s infinite;
-  content: '';
+  animation: dotty steps(1, end) 1s infinite;
+  content: "";
 }
 
 @keyframes dotty {
-  0%   { content: ''; }
-  25%  { content: '.'; }
-  50%  { content: '..'; }
-  75%  { content: '...'; }
-  100% { content: ''; }
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+  100% {
+    content: "";
+  }
 }
 
 //
 .clearfix:before,
 .clearfix:after {
-    content: ".";
-    display: block;
-    height: 0;
-    overflow: hidden;
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
 }
-.clearfix:after { clear: both; }
-.clearfix { zoom: 1; } /* IE < 8 */
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  zoom: 1;
+} /* IE < 8 */

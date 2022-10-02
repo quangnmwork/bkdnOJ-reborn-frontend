@@ -2,7 +2,7 @@ import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 import {Link, Navigate} from "react-router-dom";
-import {Row, Col, Table} from "react-bootstrap";
+import {Row, Col} from "react-bootstrap";
 
 // Assets
 import {FaWrench, FaSyncAlt} from "react-icons/fa";
@@ -13,55 +13,23 @@ import submissionAPI from "api/submission";
 
 // Componenets
 import {SpinLoader} from "components";
-import {CodeEditor} from "components/CodeEditor";
 
 // Context
 import ContestContext from "context/ContestContext";
 
 // Helpers
 import {withParams} from "helpers/react-router";
-import {parseTime, parseMem} from "helpers/textFormatter";
+
 import {setTitle} from "helpers/setTitle";
 
 import {shouldStopPolling} from "constants/statusFilter";
-
+import SubmissionTestCaseTable from "./components/detail/SubmissionTestCase";
 import "./SubmissionDetails.scss";
+import SubmissionGeneral from "./components/detail/SubmissionGeneral";
+import SubmissionExcution from "./components/detail/SubmissionExcution";
 
 const __SUBMISSION_DETAIL_POLL_DELAY = 3000;
 const __SUBMISSION_MAX_POLL_DURATION = 30000; // ms
-
-class SubmissionTestCase extends React.Component {
-  render() {
-    const data = this.props.data;
-    const problem = this.props.problem;
-    const maxTime = problem.time_limit;
-
-    return (
-      <tr className="test-case-result">
-        <td>
-          <strong>Case#{data.case}</strong>
-        </td>
-        <td>
-          <span className={`verdict ${data.status.toLowerCase()}`}>
-            <span className={`verdict-wrapper ${data.status.toLowerCase()}`}>
-              <span className="text">{data.status}</span>
-            </span>
-          </span>
-        </td>
-        <td>
-          <span className="time">
-            {data.status === "tle"
-              ? `>${parseTime(maxTime)}`
-              : parseTime(data.time)}
-          </span>
-        </td>
-        <td>
-          <span className="time">{parseMem(data.memory)}</span>
-        </td>
-      </tr>
-    );
-  }
-}
 
 class SubmissionDetails extends React.Component {
   static contextType = ContestContext;
@@ -106,6 +74,7 @@ class SubmissionDetails extends React.Component {
       .adminRejudgeSubmission({id: this.state.id})
       .then(() => {
         toast.success("OK Rejudging.");
+
         this.setState(
           {
             loaded: false,
@@ -265,120 +234,14 @@ class SubmissionDetails extends React.Component {
                   </div>
                 </>
               )}
-              <div className="general info-subsection">
-                <h5 className="subsection">General</h5>
-                {data.contest_object && (
-                  <Col>
-                    <span>
-                      <strong>{`This submission was made in contest `}</strong>
-                      <Link to={`/contest/${data.contest_object}`}>
-                        {data.contest_object}
-                      </Link>
-                    </span>
-                  </Col>
-                )}
-                <Row>
-                  <Col>
-                    <span>
-                      <strong>Author:</strong>
-                      <Link to={`/user/${data.user.user.username}`}>
-                        {data.user.user.username}
-                      </Link>
-                    </span>
-                  </Col>
-                  <Col>
-                    <span>
-                      <strong>Problem:</strong>
-                      <Link to={`/problem/${data.problem.shortname}`}>
-                        {data.problem.title}
-                      </Link>
-                    </span>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <span>
-                      <strong>Result:</strong>
-                      <span className={`verdict ${verdict.toLowerCase()}`}>
-                        <span
-                          className={`verdict-wrapper ${verdict.toLowerCase()}`}
-                        >
-                          <span className={`text`}>{verdict}</span>
-                        </span>
-                      </span>
-                    </span>
-                  </Col>
-                  <Col>
-                    <span>
-                      <strong>Points:</strong>
-                      {typeof data.points === "number" ? (
-                        <span
-                          className={`verdict ${verdict.toLowerCase()} points`}
-                        >
-                          {`(${data.points}/${maxPoints})`}
-                        </span>
-                      ) : (
-                        <span className="points">Not evaluated</span>
-                      )}
-                    </span>
-                  </Col>
-                </Row>
 
-                <Row>
-                  <Col>
-                    <span>
-                      <strong>Total Time:</strong>
-                      {parseTime(data.time)}
-                    </span>
-                  </Col>
-                  <Col>
-                    <span>
-                      <strong>Memory:</strong>
-                      {parseMem(data.memory)}
-                    </span>
-                  </Col>
-                </Row>
-              </div>
-
-              <div className="source info-subsection">
-                <h5>Source</h5>
-                <Row>
-                  <Col>
-                    <span>
-                      <strong>Language: </strong>
-                      {data.language}
-                    </span>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <CodeEditor
-                      code={data.source}
-                      onCodeChange={() => {}}
-                      ace={data.language_ace}
-                      readOnly={true}
-                    />
-                  </Col>
-                </Row>
-              </div>
-              <div className="test-result info-subsection">
-                <h5>Test Result</h5>
-                <Row>
-                  <Col>
-                    <Table responsive size="xs" striped>
-                      <tbody>
-                        {data.test_cases.map(test_case => (
-                          <SubmissionTestCase
-                            key={test_case.id}
-                            data={test_case}
-                            problem={data.problem}
-                          />
-                        ))}
-                      </tbody>
-                    </Table>
-                  </Col>
-                </Row>
-              </div>
+              <SubmissionGeneral
+                data={data}
+                verdict={verdict}
+                maxPoints={maxPoints}
+              />
+              <SubmissionExcution data={data} verdict={verdict} />
+              <SubmissionTestCaseTable data={data} />
             </>
           )}
         </div>

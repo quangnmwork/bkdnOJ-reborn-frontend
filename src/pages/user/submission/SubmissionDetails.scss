@@ -1,14 +1,22 @@
-@import 'global.scss';
+@import "global.scss";
 
 div.submission-info {
-  @import 'styles/SubmissionVerdict.scss';
+  @import "styles/SubmissionVerdict.scss";
 
-  a { color: $blue-dark }
-  h4 { margin: 5px 0; }
-  hr { 
+  a {
+    color: $blue-dark;
+  }
+  h4 {
+    margin: 5px 0;
+  }
+  hr {
     margin: unset;
     padding: unset;
   }
+  td {
+    padding: 5px !important;
+  }
+
   div.row {
     margin: unset;
     display: block;
@@ -37,8 +45,39 @@ div.submission-info {
 
     div.source {
       .ace_editor {
-        margin: 5px 0;
         border: solid 1px $base;
+      }
+
+      .accordion-button {
+        padding: 5px 10px;
+        box-shadow: none;
+
+        &::after {
+          display: none;
+        }
+      }
+
+      .row {
+        display: flex;
+        white-space: pre;
+        margin: 10px 0;
+        span {
+          width: fit-content;
+          white-space: pre;
+          strong {
+            padding-right: 10px;
+          }
+        }
+      }
+      .accordion-body {
+        padding: 0 !important;
+      }
+      .accordion-collapse {
+        transition: height 0.2s ease-in-out !important;
+      }
+      .accordion-compile {
+        white-space: pre !important;
+        word-break: break-all;
       }
     }
 
@@ -58,6 +97,38 @@ div.submission-info {
     td {
       border-top: unset;
       padding: unset;
+    }
+  }
+  .test-case {
+    &-result {
+      background-color: $background-gray;
+    }
+    &-detail {
+      background-color: $sub-bright;
+      width: 100%;
+      transition: all 0.2s;
+    }
+    &-detail__hide {
+      visibility: collapse;
+    }
+    &-expand {
+      background: none;
+      border: none;
+      transition: all 0.2s;
+    }
+    &-expand__rotate {
+      transform: rotate(-90deg);
+    }
+    &-info {
+      font-family: $font-monospace;
+      h3 {
+        font-size: 20px;
+        margin-bottom: 0;
+      }
+      pre {
+        margin-left: 5px;
+        font-size: 16px;
+      }
     }
   }
 }
