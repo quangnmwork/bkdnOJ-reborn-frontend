@@ -21,10 +21,6 @@ code {
   padding-left: 3px;
   padding-right: 3px;
 }
-pre {
-  margin-bottom: 0;
-  white-space: pre;
-}
 
 h1,
 h2,
@@ -241,3 +237,12 @@ div.wrapper-vanilla {
 .clearfix {
   zoom: 1;
 } /* IE < 8 */
+
+.style-as-default-link {
+  color: #007bff !important;
+  &:hover {
+    text-decoration: underline !important;
+    color: blue !important;
+    cursor: pointer !important;
+  }
+}

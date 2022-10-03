@@ -19,9 +19,7 @@ const SubmissionGeneral = ({data, verdict, maxPoints}) => {
         <Col>
           <span>
             <strong>Author:</strong>
-            <Link to={`/user/${data.user.user.username}`}>
-              {data.user.user.username}
-            </Link>
+            <Link to={`/user/${data.user.username}`}>{data.user.username}</Link>
           </span>
         </Col>
         <Col>

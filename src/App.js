@@ -103,7 +103,7 @@ class App extends React.Component {
                   element={<OneColumn mainContent={<AdminUserNew />} />}
                 />
                 <Route
-                  path="user/:id"
+                  path="user/:username"
                   element={<OneColumn mainContent={<AdminUserDetails />} />}
                 />
 

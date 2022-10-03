@@ -39,7 +39,7 @@ const SubmissionExcution = ({data, verdict}) => {
         </Col>
         <Col>
           <div className="float-right">
-            <strong>Result:</strong>
+            <strong className="mr-2">Result:</strong>
             <span className={`verdict ${verdict.toLowerCase()}`}>
               <span className={`verdict-wrapper ${verdict.toLowerCase()}`}>
                 <span className={`text`}>{verdict}</span>

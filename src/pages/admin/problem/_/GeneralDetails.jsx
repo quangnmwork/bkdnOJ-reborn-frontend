@@ -6,6 +6,7 @@ import {FaRegSave} from "react-icons/fa";
 import {toast} from "react-toastify";
 
 import problemAPI from "api/problem";
+import commonAPI from "api/common";
 import {withNavigation} from "helpers/react-router";
 import {SpinLoader, FileUploader, RichTextEditor} from "components";
 
@@ -116,6 +117,42 @@ class GeneralDetails extends React.Component {
       });
   }
 
+  downloadPdf(url) {
+    const toastId = toast.loading("Downloading..");
+    commonAPI
+      .downloadFile(url)
+      .then(response => {
+        toast.update(toastId, {
+          render: "Saved",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        // create file link in browser's memory
+        const href = URL.createObjectURL(response.data);
+
+        // create "a" HTLM element with href to file & click
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", "problem.pdf"); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+
+        // clean up "a" element & remove ObjectURL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      })
+      .catch(err => {
+        toast.update(toastId, {
+          render: "Download PDF failed. Check console for more info.",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        console.log("Cannot download pdf.", err);
+      });
+  }
+
   render() {
     const {data} = this.state;
     return (
@@ -209,7 +246,10 @@ class GeneralDetails extends React.Component {
                 </Form.Label>
                 <Col md={6}>
                   {data.pdf ? (
-                    <a href={data.pdf} className="text-truncate">
+                    <a
+                      /*href={data.pdf}*/ className="text-truncate style-as-default-link"
+                      onClick={() => this.downloadPdf(data.pdf)}
+                    >
                       {data.pdf}
                     </a>
                   ) : (

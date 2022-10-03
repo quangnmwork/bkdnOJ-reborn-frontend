@@ -30,8 +30,15 @@ const recomputeContestStanding = ({ key, params }) => {
 const getContestParticipations = ({ key, params }) => {
     return axiosClient.get(`/contest/${key}/participations/`, (params && { params: {...params} }));
 }
+
 const addContestParticipations = ({ key, data }) => {
     return axiosClient.post(`/contest/${key}/participations/add/`, data);
+}
+
+const actContestParticipation = ({ key, data }) => {
+    if (!('action' in data)) throw "Expect 'action' in body";
+    if (!('data' in data)) throw "Expect 'data' in body";
+    return axiosClient.post(`/contest/${key}/participations/action/`, data);
 }
 
 const getContestSubmissions = ({ key, params }) => {
@@ -104,7 +111,9 @@ const contestAPI = {
     getContestStanding, recomputeContestStanding,
     getContestSubmissions, rejudgeContestSubmissions,
 
+    // Participations
     getContestParticipations, addContestParticipations,
+    actContestParticipation,
 
     getContestParticipants,
 

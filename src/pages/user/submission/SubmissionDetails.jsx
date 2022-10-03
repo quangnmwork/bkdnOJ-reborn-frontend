@@ -10,13 +10,9 @@ import {VscError} from "react-icons/vsc";
 
 // Services
 import submissionAPI from "api/submission";
-
+import ContestContext from "context/ContestContext";
 // Componenets
 import {SpinLoader} from "components";
-
-// Context
-import ContestContext from "context/ContestContext";
-
 // Helpers
 import {withParams} from "helpers/react-router";
 
@@ -74,7 +70,6 @@ class SubmissionDetails extends React.Component {
       .adminRejudgeSubmission({id: this.state.id})
       .then(() => {
         toast.success("OK Rejudging.");
-
         this.setState(
           {
             loaded: false,
@@ -241,7 +236,7 @@ class SubmissionDetails extends React.Component {
                 maxPoints={maxPoints}
               />
               <SubmissionExcution data={data} verdict={verdict} />
-              <SubmissionTestCaseTable data={data} />
+              <SubmissionTestCaseTable submissionData={data} />
             </>
           )}
         </div>

@@ -144,6 +144,7 @@ UserCard.propTypes = {
     avatar: PropTypes.string,
     first_name: PropTypes.string,
     last_name: PropTypes.string,
+    display_name: PropTypes.string,
 
     organization: PropTypes.object,
   }).isRequired,

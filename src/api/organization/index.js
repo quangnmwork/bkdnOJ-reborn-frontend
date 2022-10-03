@@ -7,6 +7,10 @@ const getOrgs = ({slug, params}) => {
         return axiosClient.get('/orgs/', (params && { params: {...params} }));
 }
 
+const getAllOrgs = ({params}) => {
+    return axiosClient.get('/orgs/all/', (params && { params: {...params} }));
+}
+
 const getMyOrgs = () => {
     return axiosClient.get('/orgs/my/', );
 }
@@ -53,7 +57,8 @@ const removeOrgMembers = ({ slug, data }) => {
 }
 
 const orgAPI = {
-    getOrgs, getMyOrgs,
+    getOrgs, getMyOrgs, getAllOrgs,
+
     createOrg,
     getOrg, updateOrg, deleteOrg,
     createSubOrg,

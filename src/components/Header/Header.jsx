@@ -29,7 +29,7 @@ export default class Header extends React.Component {
                         </Link>
                     </div>
                     <span>bkdnOJ v2.0</span>
-                    <span>pre-ALPHA</span>
+                    <span>open-Beta</span>
                     {/* <span>Bugs are to be expected, please report them to lambda.nvat@gmail.com</span> */}
                     {/* <span>🇻🇳 🇬🇧</span> */}
                     <span className="bugs" onClick={() => this.handleOpen()}>Bugs 🐞</span>
@@ -39,17 +39,17 @@ export default class Header extends React.Component {
                 <Modal show={this.state.show} onHide={() => this.handleClose()} centered>
                     <Modal.Header>
                     <Modal.Title className="flex-center">
-                        <VscBug/> Bugs Season!
+                        <VscBug/> Bugs Season <VscBug/>
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        🐞 Đây là phiên bản thử nghiệm của bkdnOJ v2.0 vẫn trong quá trình phát triển nên chắc chắn sẽ tồn tại bugs nhiều hình thái, đôi khi rất quái gở.
+                        🐞 Đây là phiên bản beta của bkdnOJ v2.0 vẫn trong quá trình phát triển nên chắc chắn sẽ tồn tại bugs nhiều hình thái, đôi khi rất quái gở.
                         Mong nhận được sự thông cảm của mọi người.
                         <br/> <br/>
                         🐞 Để báo cáo bugs, tạo <strong>New Issue</strong> tại <a href={github}>Github này</a> và
                         đính kèm ảnh/video bug, mô tả bug, nêu những bước để tái hiện bug đó. Xin cảm ơn các bạn đã chung tay giúp cho bkdnOJ-v2 hoàn thiện hơn.
                         <br/>
-                        <sub style={{float: "right"}}>🐞 "All your bugs belong to us!"</sub>
+                        <sub style={{float: "right"}}>🐞🐞🐞</sub>
                     </Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={() => this.handleClose()}>

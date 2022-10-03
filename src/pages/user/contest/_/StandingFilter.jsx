@@ -79,7 +79,7 @@ const StandingFilter = ({contestId, orgList}) => {
                   onChange={onToggleOrgFilter}
                   checked={!!isOrgFilterEnable}
                 />
-                <span>Organization</span>
+                <span>Filter by Orgs</span>
               </label>
               <ClearIcon onClick={onClearOrgFilter} />
             </div>
@@ -110,7 +110,7 @@ const StandingFilter = ({contestId, orgList}) => {
                 checked={isFavoriteEnable}
                 onChange={onToggleFavoriteFilter}
               />
-              <span>Favorite Only</span>
+              <span>With Favorites</span>
             </label>
             <ClearIcon onClick={onClearFavoriteFilter} />
           </div>

@@ -8,6 +8,7 @@ import {FaRegSave} from "react-icons/fa";
 import {VscRefresh} from "react-icons/vsc";
 
 import problemAPI from "api/problem";
+import commonAPI from "api/common";
 
 export default class TestDataDetails extends React.Component {
   constructor(props) {
@@ -121,6 +122,81 @@ export default class TestDataDetails extends React.Component {
     });
   }
 
+  downloadZip(url) {
+    const toastId = toast.loading("Downloading..");
+    commonAPI
+      .downloadFile(url)
+      .then(response => {
+        toast.update(toastId, {
+          render: "Saved",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        // create file link in browser's memory
+        const href = URL.createObjectURL(response.data);
+
+        // create "a" HTLM element with href to file & click
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", `archive-${this.props.shortname}.zip`); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+
+        // clean up "a" element & remove ObjectURL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      })
+      .catch(err => {
+        toast.update(toastId, {
+          render: "Download PDF failed. Check console for more info.",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        console.log("Cannot download pdf.", err);
+      });
+  }
+
+  downloadCustomChecker(url) {
+    let filename = url.substring(url.lastIndexOf("/") + 1);
+    if (filename.length === 0) filename = "customchecker";
+
+    const toastId = toast.loading("Downloading..");
+    commonAPI
+      .downloadFile(url)
+      .then(response => {
+        toast.update(toastId, {
+          render: "Saved",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        // create file link in browser's memory
+        const href = URL.createObjectURL(response.data);
+
+        // create "a" HTLM element with href to file & click
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", `${filename}`); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+
+        // clean up "a" element & remove ObjectURL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      })
+      .catch(err => {
+        toast.update(toastId, {
+          render: "Download PDF failed. Check console for more info.",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        console.log("Cannot download pdf.", err);
+      });
+  }
+
   render() {
     const {data} = this.state;
     return (
@@ -150,7 +226,10 @@ export default class TestDataDetails extends React.Component {
           <Col md={10}>
             <div className="p-0">
               {data.zipfile ? (
-                <a href={data.zipfile} className="text-truncate">
+                <a
+                  /*href={data.pdf}*/ className="text-truncate style-as-default-link"
+                  onClick={() => this.downloadZip(data.zipfile)}
+                >
                   {data.zipfile}
                 </a>
               ) : (

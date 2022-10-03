@@ -38,13 +38,13 @@ const OrgSelectLabel = props => {
   );
 };
 
-export default class UserSingleSelect extends React.Component {
+export default class OrgSingleSelect extends React.Component {
   constructor(props) {
     super(props);
   }
 
   async loadOptions(val) {
-    return orgAPI.getOrgs({params: {search: val}}).then(res => {
+    return orgAPI.getAllOrgs({params: {search: val}}).then(res => {
       let data = res.data.results.map(org => ({
         value: org.slug,
         label: <OrgSelectLabel {...org} />,
@@ -67,6 +67,7 @@ export default class UserSingleSelect extends React.Component {
             "Hệ thống chỉ trả về 20 Orgs khớp tìm kiếm nhất. " +
             "Hãy thử đổi nội dung tìm nếu không tìm thấy Org mong muốn."
           }
+          isDisabled={this.props.disabled}
           loadOptions={val => this.loadOptions(val)}
           onChange={sel => this.props.onChange({...sel.data})}
           value={

@@ -88,7 +88,7 @@ export default class ErrorBox extends React.Component {
       if (typeof errors[key] === "string" || errors[key] instanceof String) {
         strErrors.push(errors[key]);
       } else if (errors[key] instanceof Array) {
-        // strErrors.concat(errors[key])
+        kwErrors = {...kwErrors, [key]: JSON.stringify(errors[key])};
       } else if (
         typeof errors[key] === "object" &&
         !Array.isArray(errors[key]) &&

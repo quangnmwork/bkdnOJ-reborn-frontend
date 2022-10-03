@@ -60,9 +60,9 @@ class Content extends React.Component {
                 <h4 className="">Bách Khoa Đà Nẵng Online Judge 2.0</h4>
                 <div className="title">
                   <h5 className="">
-                    ver. <span className="code-markup">preALPHA</span>
+                    phase <span className="code-markup">openBETA</span>
                   </h5>
-                  <span className="code-markup">22年08月28日</span>
+                  <span className="code-markup">22年10月01日</span>
                 </div>
               </div>
               <span className="subtext text-center">

@@ -4,27 +4,34 @@ import axiosFormClient from "api/axiosFormClient";
 const getUsers = ({ params }) => {
     return axiosClient.get('/users/', (params && { params: {...params} }));
 }
-const getUser = ({id}) => {
-    return axiosClient.get(`/user/${id}/`);
+const getUser = ({username}) => {
+    return axiosClient.get(`/user/${username}/`);
 }
 
-const adminEditUser = ({id, data}) => {
-    return axiosClient.patch(`/user/${id}/`, data);
+const adminEditUser = ({username, data}) => {
+    return axiosClient.patch(`/user/${username}/`, data);
 }
-const adminDeleteUser = ({id}) => {
-    return axiosClient.delete(`/user/${id}/`);
+
+const adminActOnUsers = (payload) => {
+    return axiosClient.post(`/users/act/`, payload);
 }
+
+const adminDeleteUser = ({username}) => {
+    return axiosClient.delete(`/user/${username}/`);
+}
+
 const adminGenUserFromCSV = ({formData}) => {
-    return axiosFormClient.post(`/user/generate/csv/`, formData)
+    return axiosFormClient.post(`/users/generate/csv/`, formData)
 }
 
-const adminResetPassword = ({id, data}) => {
-    return axiosClient.post(`/user/${id}/reset-password/`, data);
+const adminResetPassword = ({username, data}) => {
+    return axiosClient.post(`/user/${username}/reset-password/`, data);
 }
 
 const userAPI = {
     getUsers,
     getUser,
+    adminActOnUsers,
     adminGenUserFromCSV,
     adminEditUser,
     adminDeleteUser,

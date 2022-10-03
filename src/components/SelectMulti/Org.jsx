@@ -44,7 +44,7 @@ export default class UserMultiSelect extends React.Component {
   }
 
   async loadOptions(val) {
-    return orgAPI.getOrgs({params: {search: val}}).then(res => {
+    return orgAPI.getAllOrgs({params: {search: val}}).then(res => {
       let data = res.data.results.map(org => ({
         value: org.slug,
         label: <OrgSelectLabel {...org} />,
@@ -55,12 +55,13 @@ export default class UserMultiSelect extends React.Component {
   }
 
   render() {
-    const orgs = this.props.value;
+    const orgs = this.props.value || [];
 
     return (
       <>
         <AsyncSelect
           isMulti
+          isDisabled={this.props.isDisabled || false}
           cacheOptions
           // defaultOptions
           placeholder="Tìm slug/name/short_name..."

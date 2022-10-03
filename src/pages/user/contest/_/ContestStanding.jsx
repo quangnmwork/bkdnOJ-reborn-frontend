@@ -121,6 +121,8 @@ class StandingItem extends React.Component {
       showCumtime = cumtime;
     }
 
+    const org = this.props.orgOverride || orgMapping[userMapping[user].organization]
+
     return (
       <tr id={`standing-${user}`} className={this.props.className}>
         <td className="td-rank">
@@ -159,7 +161,7 @@ class StandingItem extends React.Component {
             <UserCard
               displayMode={this.props.displayMode}
               user={userMapping[user]}
-              organization={orgMapping[userMapping[user].organization]}
+              organization={org}
               isFavorite={isFavorite}
               contestId={contestId}
             />
@@ -547,7 +549,8 @@ class ContestStanding extends React.Component {
                   let userFilteredRank = undefined;
                   if (isFilterEnable) {
                     const orgName = this.state.userMapping[user].organization;
-                    const isShow = filteredOrg.includes(orgName) || isFavorite;
+                    const isShow = (filteredOrg.includes(orgName) && isOrgFilterEnable) || 
+                      (isFavorite && isFavoriteOnly) ;
                     if (isShow) userFilteredRank = baseFilteredRank++;
                     else return <></>;
                   }
@@ -559,6 +562,7 @@ class ContestStanding extends React.Component {
                       className={`scroll__margin ${
                         isHighlight ? "scroll__highlight" : ""
                       }`}
+                      orgOverride={part.organization || null}
                       orgMapping={this.state.orgMapping}
                       probMapping={this.state.probId2idx}
                       userMapping={this.state.userMapping}
